@@ -84,7 +84,7 @@ void _pop(stack_t **stack, unsigned int line_number)
 
 void _swap(stack_t **stack, unsigned int line_number)
 {
-	stack_t *temp1, *temp2;
+	stack_t *temp, *temp2;
 
 	(void)(line_number);
 
@@ -94,12 +94,12 @@ void _swap(stack_t **stack, unsigned int line_number)
 		free_dlistint(stack);
 		exit(EXIT_FAILURE);
 	}
-	temp1 = *stack;
+	temp = *stack;
 	*stack = (*stack)->next;
 	temp2 = *stack;
-	temp1->next = temp2->next;
-	temp2->next = temp1;
-	temp1->prev = temp2;
+	temp->next = temp2->next;
+	temp2->next = temp;
+	temp->prev = temp2;
 	temp2->prev = NULL;
 }
 
@@ -260,4 +260,24 @@ void _queue(stack_t **stack, unsigned int line_number)
 	(void)(stack), (void)(line_number);
 	p_id = &id;
 	*p_id = 0;
+}
+
+void _rotl(stack_t **stack, unsigned int line_number)
+{
+	stack_t *temp1, *temp2, *last;
+
+	(void)(line_number);
+
+	if (*stack == NULL || dlistint_len(*stack) < 2)
+		return;
+	temp1 = *stack;
+	last = *stack;
+	while (last->next != NULL)
+		last = last->next;
+	*stack = (*stack)->next;
+	temp2 = *stack;
+	temp2->prev = NULL;
+	last->next = temp1;
+	temp1->prev = last;
+	temp1->next = NULL;
 }
