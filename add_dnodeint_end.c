@@ -1,7 +1,7 @@
 #include "monty.h"
 
 /**
- * add_dnodeint_end - add node at the end
+ * add_dnodeint_end - add data to end
  * of stack
  *
  * @head: Head node
@@ -10,11 +10,18 @@
  */
 stack_t *add_dnodeint_end(stack_t **head, int n)
 {
+	int *p_id;
 	stack_t *last = *head;
 	stack_t *temp = malloc(sizeof(stack_t));
 
 	if (temp == NULL)
+	{
+		fprintf(stderr, "Error: malloc failed\n");
+		p_id = &id;
+		*p_id = -1;
 		return (NULL);
+	}
+
 	temp->n = n;
 	temp->next = NULL;
 

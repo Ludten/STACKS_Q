@@ -1,38 +1,24 @@
 #include "monty.h"
 
 /**
- * rem_ - remove spaces
+ * exec_op - find and execute opcodes
  *
- * @str: input string
- * Return: Modified string
+ * @args: arguments
+ * @h: head node
+ * @ltr: line number
  */
-char *rem_(char *str)
-{
-	while (*str == ' ')
-		str++;
-	return (str);
-}
-
 void exec_op(char **args, stack_t **h, int *ltr)
 {
-	int i;
+	int i, *p_id;
 	instruction_t op[] = {
-		{"pall", _pall},
-		{"pint", _pint},
-		{"pop", _pop},
-		{"swap", _swap},
-		{"add", _add},
-		{"sub", _sub},
-		{"mul", _mul},
-		{"div", _div},
-		{"mod", _mod},
-		{"nop", _nop},
-		{"pchar", _pchar},
-		{"pstr", _pstr},
-		{"rotl", _rotl},
-		{"rotr", _rotr},
-		{"stack", _stack},
-		{"queue", _queue}};
+		{"pall", _pall}, {"pint", _pint},
+		{"pop", _pop}, {"swap", _swap},
+		{"add", _add}, {"sub", _sub},
+		{"mul", _mul}, {"div", _div},
+		{"mod", _mod}, {"nop", _nop},
+		{"pchar", _pchar},{"pstr", _pstr},
+		{"rotl", _rotl}, {"rotr", _rotr},
+		{"stack", _stack}, {"queue", _queue}};
 
 	if (strcmp("push", args[0]) == 0)
 	{
@@ -47,35 +33,23 @@ void exec_op(char **args, stack_t **h, int *ltr)
 				(op[i].f)(h, ++*ltr);
 				break;
 			}
+			else
+			{
+				fprintf(stderr, "L%d: unknown instruction %s\n", ++*ltr, args[0]);
+				free_dlistint(h);
+				p_id = &id;
+				*p_id = -1;
+				return;
+			}
 		}
 	}
 }
 
-char **tokenise(char *str)
-{
-	int i;
-	char **argv, *token;
-
-	argv = malloc(sizeof(char *) * 10);
-	if (argv == NULL)
-	{
-		fprintf(stderr, "Error: malloc failed\n");
-		exit(EXIT_FAILURE);
-	}
-
-	token = strtok(str, " ");
-	i = 0;
-	while (token != NULL)
-	{
-		argv[i] = token;
-		token = strtok(NULL, " ");
-		i++;
-	}
-	argv[i] = NULL;
-
-	return argv;
-}
-
+/**
+ * check_args - check no. of args
+ *
+ * @argc: argument counter
+ */
 void check_args(int argc)
 {
 	if (argc != 2)
@@ -85,6 +59,12 @@ void check_args(int argc)
 	}
 }
 
+/**
+ * file_mode: open file
+ *
+ * @filename: file name
+ * @h: head node
+ */
 void file_mode(char *filename, stack_t **h)
 {
 	FILE *fptr;
@@ -106,25 +86,16 @@ void file_mode(char *filename, stack_t **h)
 				line[strlen(line) - 1] = '\0';
 			t_input = line;
 			input = rem_(t_input);
-			if (input[0] == '\0' || input[0] == '#' || strcmp(input, "\n") == 0)
+			if (input[0] == '\0' || input[0] == '#' || input[0] == '\n')
 				continue;
 			args = tokenise(input);
 			exec_op(args, h, ltr);
 			free(args);
+			if (id == -1)
+				break;
 		}
 	}
 	fclose(fptr);
-}
-
-
-int main(int argc, char **argv)
-{
-	stack_t *head;
-	(void)(argc), (void)(argv);
-
-	head = NULL;
-	check_args(argc);
-	file_mode(argv[1], &head);
-	free_dlistint(&head);
-	return 0;
+	if (id == -1)
+		exit(EXIT_FAILURE);
 }

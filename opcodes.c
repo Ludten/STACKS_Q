@@ -2,42 +2,24 @@
 
 int id = 1;
 
-int IsNumeric(char* String)
-{
-	size_t i;
-
-	if (String == NULL)
-		return 0;
-	if (String[0] == '-')
-	{
-		for (i = 1; i < strlen(String); i++)
-		{
-			if ((String[i] < '0') || (String[i] > '9'))
-				return (0);
-		}
-	}
-	else
-	{
-		for (i = 0; i < strlen(String); i++)
-		{
-			if ((String[i] < '0') || (String[i] > '0' + 9))
-				return (0);
-		}
-	}
-
-	return (1);
-}
-
+/**
+ * _push - push unto stack
+ *
+ * @h: head node
+ * @args: arguments
+ * @line_number: line number
+ */
 void _push(stack_t **h, char **args, unsigned int line_number)
 {
-	int n;
+	int n, *p_id;
 
 	if (!IsNumeric(args[1]) || args[1] == NULL)
 	{
 		fprintf(stderr, "L%d: usage: push integer\n", line_number);
-		free(args);
 		free_dlistint(h);
-		exit(EXIT_FAILURE);
+		p_id = &id;
+		*p_id = -1;
+		return;
 	}
 
 	n = atoi(args[1]);
@@ -55,11 +37,15 @@ void _pall(stack_t **stack, unsigned int line_number)
 
 void _pint(stack_t **stack, unsigned int line_number)
 {
+	int *p_id;
+
 	(void)(line_number);
 	if (*stack == NULL)
 	{
 		fprintf(stderr, "L%d: usage: can't pint, stack empty\n", line_number);
-		exit(EXIT_FAILURE);
+		p_id = &id;
+		*p_id = -1;
+		return;
 	}
 
 	printf("%d\n", (*stack)->n);
@@ -68,31 +54,36 @@ void _pint(stack_t **stack, unsigned int line_number)
 void _pop(stack_t **stack, unsigned int line_number)
 {
 	stack_t *temp;
+	int *p_id;
 
 	(void)(line_number);
 	if (*stack == NULL)
 	{
 		fprintf(stderr, "L%d: can't pop an empty stack\n", line_number);
-		exit(EXIT_FAILURE);
+		p_id = &id;
+		*p_id = -1;
+		return;
 	}
 
 	temp = *stack;
 	*stack = (*stack)->next;
-	(*stack)->prev = NULL;
 	free(temp);
 }
 
 void _swap(stack_t **stack, unsigned int line_number)
 {
 	stack_t *temp, *temp2;
+	int *p_id;
 
 	(void)(line_number);
 
 	if (*stack == NULL || dlistint_len(*stack) < 2)
 	{
-		fprintf(stderr, "L%d: can't pop an empty stack\n", line_number);
+		fprintf(stderr, "L%d: can't swap, stack too short\n", line_number);
 		free_dlistint(stack);
-		exit(EXIT_FAILURE);
+		p_id = &id;
+		*p_id = -1;
+		return;
 	}
 	temp = *stack;
 	*stack = (*stack)->next;
@@ -106,7 +97,7 @@ void _swap(stack_t **stack, unsigned int line_number)
 void _add(stack_t **stack, unsigned int line_number)
 {
 	stack_t *temp;
-	int sum;
+	int sum, *p_id;
 
 	(void)(line_number);
 
@@ -114,7 +105,9 @@ void _add(stack_t **stack, unsigned int line_number)
 	{
 		fprintf(stderr, "L%d: can't add, stack too short\n", line_number);
 		free_dlistint(stack);
-		exit(EXIT_FAILURE);
+		p_id = &id;
+		*p_id = -1;
+		return;
 	}
 	temp = *stack;
 	sum = temp->n + (temp->next)->n;
@@ -131,7 +124,7 @@ void _nop(stack_t **stack, unsigned int line_number)
 void _sub(stack_t **stack, unsigned int line_number)
 {
 	stack_t *temp;
-	int sub;
+	int sub, *p_id;
 
 	(void)(line_number);
 
@@ -139,7 +132,9 @@ void _sub(stack_t **stack, unsigned int line_number)
 	{
 		fprintf(stderr, "L%d: can't sub, stack too short\n", line_number);
 		free_dlistint(stack);
-		exit(EXIT_FAILURE);
+		p_id = &id;
+		*p_id = -1;
+		return;
 	}
 	temp = *stack;
 	sub = (temp->next)->n - temp->n;
@@ -150,7 +145,7 @@ void _sub(stack_t **stack, unsigned int line_number)
 void _div(stack_t **stack, unsigned int line_number)
 {
 	stack_t *temp;
-	int div;
+	int div, *p_id;
 
 	(void)(line_number);
 
@@ -158,7 +153,9 @@ void _div(stack_t **stack, unsigned int line_number)
 	{
 		fprintf(stderr, "L%d: can't div, stack too short\n", line_number);
 		free_dlistint(stack);
-		exit(EXIT_FAILURE);
+		p_id = &id;
+		*p_id = -1;
+		return;
 	}
 	temp = *stack;
 	div = (temp->next)->n / temp->n;
@@ -169,7 +166,7 @@ void _div(stack_t **stack, unsigned int line_number)
 void _mul(stack_t **stack, unsigned int line_number)
 {
 	stack_t *temp;
-	int mul;
+	int mul, *p_id;
 
 	(void)(line_number);
 
@@ -177,7 +174,9 @@ void _mul(stack_t **stack, unsigned int line_number)
 	{
 		fprintf(stderr, "L%d: can't mul, stack too short\n", line_number);
 		free_dlistint(stack);
-		exit(EXIT_FAILURE);
+		p_id = &id;
+		*p_id = -1;
+		return;
 	}
 	temp = *stack;
 	mul = (temp->next)->n * temp->n;
@@ -188,7 +187,7 @@ void _mul(stack_t **stack, unsigned int line_number)
 void _mod(stack_t **stack, unsigned int line_number)
 {
 	stack_t *temp;
-	int mod;
+	int mod, *p_id;
 
 	(void)(line_number);
 
@@ -196,7 +195,9 @@ void _mod(stack_t **stack, unsigned int line_number)
 	{
 		fprintf(stderr, "L%d: can't mod, stack too short\n", line_number);
 		free_dlistint(stack);
-		exit(EXIT_FAILURE);
+		p_id = &id;
+		*p_id = -1;
+		return;
 	}
 	temp = *stack;
 	mod = (temp->next)->n % temp->n;
@@ -206,18 +207,23 @@ void _mod(stack_t **stack, unsigned int line_number)
 
 void _pchar(stack_t **stack, unsigned int line_number)
 {
+	int *p_id;
 	(void)(line_number);
 	if (*stack == NULL)
 	{
 		fprintf(stderr, "L%d: usage: can't pchar, stack empty\n", line_number);
-		exit(EXIT_FAILURE);
+		p_id = &id;
+		*p_id = -1;
+		return;
 	}
 
 	if ((*stack)->n < 0 || (*stack)->n > 127)
 	{
 		fprintf(stderr, "L%d: can't pchar, value out of range\n", line_number);
 		free_dlistint(stack);
-		exit(EXIT_FAILURE);
+		p_id = &id;
+		*p_id = -1;
+		return;
 	}
 
 	putchar((*stack)->n);
