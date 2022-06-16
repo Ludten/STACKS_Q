@@ -1,5 +1,7 @@
 #include "monty.h"
 
+int id = 1;
+
 int IsNumeric(char* String)
 {
 	size_t i;
@@ -39,7 +41,10 @@ void _push(stack_t **h, char **args, unsigned int line_number)
 	}
 
 	n = atoi(args[1]);
-	add_dnodeint(h, n);
+	if (id == 1)
+		add_dnodeint(h, n);
+	else if (id == 0)
+		add_dnodeint_end(h, n);
 }
 
 void _pall(stack_t **stack, unsigned int line_number)
@@ -140,4 +145,119 @@ void _sub(stack_t **stack, unsigned int line_number)
 	sub = (temp->next)->n - temp->n;
 	(temp->next)->n = sub;
 	_pop(stack, line_number);
+}
+
+void _div(stack_t **stack, unsigned int line_number)
+{
+	stack_t *temp;
+	int div;
+
+	(void)(line_number);
+
+	if (*stack == NULL || dlistint_len(*stack) < 2)
+	{
+		fprintf(stderr, "L%d: can't div, stack too short\n", line_number);
+		free_dlistint(stack);
+		exit(EXIT_FAILURE);
+	}
+	temp = *stack;
+	div = (temp->next)->n / temp->n;
+	(temp->next)->n = div;
+	_pop(stack, line_number);
+}
+
+void _mul(stack_t **stack, unsigned int line_number)
+{
+	stack_t *temp;
+	int mul;
+
+	(void)(line_number);
+
+	if (*stack == NULL || dlistint_len(*stack) < 2)
+	{
+		fprintf(stderr, "L%d: can't mul, stack too short\n", line_number);
+		free_dlistint(stack);
+		exit(EXIT_FAILURE);
+	}
+	temp = *stack;
+	mul = (temp->next)->n * temp->n;
+	(temp->next)->n = mul;
+	_pop(stack, line_number);
+}
+
+void _mod(stack_t **stack, unsigned int line_number)
+{
+	stack_t *temp;
+	int mod;
+
+	(void)(line_number);
+
+	if (*stack == NULL || dlistint_len(*stack) < 2)
+	{
+		fprintf(stderr, "L%d: can't mod, stack too short\n", line_number);
+		free_dlistint(stack);
+		exit(EXIT_FAILURE);
+	}
+	temp = *stack;
+	mod = (temp->next)->n % temp->n;
+	(temp->next)->n = mod;
+	_pop(stack, line_number);
+}
+
+void _pchar(stack_t **stack, unsigned int line_number)
+{
+	(void)(line_number);
+	if (*stack == NULL)
+	{
+		fprintf(stderr, "L%d: usage: can't pchar, stack empty\n", line_number);
+		exit(EXIT_FAILURE);
+	}
+
+	if ((*stack)->n < 0 || (*stack)->n > 127)
+	{
+		fprintf(stderr, "L%d: can't pchar, value out of range\n", line_number);
+		free_dlistint(stack);
+		exit(EXIT_FAILURE);
+	}
+
+	putchar((*stack)->n);
+	putchar('\n');
+}
+
+void _pstr(stack_t **stack, unsigned int line_number)
+{
+	stack_t *temp;
+
+	(void)(line_number);
+
+	if (*stack == NULL)
+		return;
+
+	temp = *stack;
+	while (temp != NULL)
+	{
+		if (temp->n <= 0 || temp->n > 127)
+			break;
+		putchar(temp->n);
+		temp = temp->next;
+	}
+	putchar('\n');
+}
+
+void _stack(stack_t **stack, unsigned int line_number)
+{
+	int *p_id;
+
+	(void)(stack), (void)(line_number);
+	p_id = &id;
+	*p_id = 1;
+}
+
+void _queue(stack_t **stack, unsigned int line_number)
+{
+	int *p_id;
+
+	(void)(stack), (void)(line_number);
+	p_id = &id;
+	*p_id = 0;
 }

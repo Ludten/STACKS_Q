@@ -23,7 +23,14 @@ void exec_op(char **args, stack_t **h, int *ltr)
 		{"swap", _swap},
 		{"add", _add},
 		{"sub", _sub},
-		{"nop", _nop}};
+		{"mul", _mul},
+		{"div", _div},
+		{"mod", _mod},
+		{"nop", _nop},
+		{"pchar", _pchar},
+		{"pstr", _pstr},
+		{"stack", _stack},
+		{"queue", _queue}};
 
 	if (strcmp("push", args[0]) == 0)
 	{

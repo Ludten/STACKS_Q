@@ -1,11 +1,16 @@
+queue
 push 1
-pint
-push      2
-pint
-push 10
+push 2
 push 3
-       pint
 pall
-#play ball, we wee
-sub
+stack
+push 4
+push 5
+push 6
+pall
+add
+pall
+queue
+push 11111
+add
 pall
