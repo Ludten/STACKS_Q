@@ -30,6 +30,7 @@ void exec_op(char **args, stack_t **h, int *ltr)
 		{"pchar", _pchar},
 		{"pstr", _pstr},
 		{"rotl", _rotl},
+		{"rotr", _rotr},
 		{"stack", _stack},
 		{"queue", _queue}};
 
