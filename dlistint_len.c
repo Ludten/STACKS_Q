@@ -6,7 +6,7 @@
  * @h: Head node
  * Return: Length of stack
  */
-size_t dlistint_len( stack_t *h)
+size_t dlistint_len(stack_t *h)
 {
 	stack_t *temp;
 	size_t i;

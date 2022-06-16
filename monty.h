@@ -18,9 +18,9 @@ extern int id;
  */
 typedef struct stack_s
 {
-        int n;
-        struct stack_s *prev;
-        struct stack_s *next;
+	int n;
+	struct stack_s *prev;
+	struct stack_s *next;
 } stack_t;
 
 /**
@@ -33,8 +33,8 @@ typedef struct stack_s
  */
 typedef struct instruction_s
 {
-        char *opcode;
-        void (*f)(stack_t **stack, unsigned int line_number);
+	char *opcode;
+	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
 void file_mode(char *filename, stack_t **h);
@@ -42,13 +42,13 @@ void file_mode(char *filename, stack_t **h);
 stack_t *add_dnodeint(stack_t **head, int n);
 stack_t *add_dnodeint_end(stack_t **head, int n);
 void print_dlistint(stack_t **h);
-size_t dlistint_len( stack_t *h);
+size_t dlistint_len(stack_t *h);
 void free_dlistint(stack_t **head);
 
 char *rem_(char *str);
 void check_args(int argc);
 char **tokenise(char *str);
-int IsNumeric(char* String);
+int IsNumeric(char *String);
 
 void exec_op(char **args, stack_t **h, int *ltr);
 void _push(stack_t **h, char **args, unsigned int line_number);
